@@ -1,3 +1,8 @@
+// bitset.c
+// Riešenie IJC-DU1, príklad a), 21.03.2024
+// Autor: Adam Veselý, FIT
+// Preložené gcc version 11.4.0
+
 #include "bitset.h"
 
 #ifdef USE_INLINE
