@@ -32,6 +32,7 @@ typedef unsigned long bitset_index_t;                                           
     static_assert(size > 0, "ERROR: bitset_alloc: Invalid size\n");                               \
     bitset_t name = malloc(((size - 1) / BIT_AMOUNT) + 1);                                        \
     static_assert(name != NULL, "ERROR: bitset_alloc: Unable to allocate memory for array.\n");   \
+    bitset_fill(name, 0);                                                                         \
     name[0] = size;                                                                               \
 
 /* ---------------------- MACROS ---------------------- */
