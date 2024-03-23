@@ -6,6 +6,7 @@
 #ifndef ERATOSTHENES_H
 #define ERATOSTHENES_H
 
+
 #include "bitset.h"
 
 void eratosthenes(bitset_t name);

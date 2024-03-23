@@ -45,7 +45,7 @@ typedef unsigned long bitset_index_t;                                           
     }                                                                                             \
 
 #define bitset_size(name)                                                                         \
-    name[0];                                                                                      \
+    name[0]                                                                                       \
 
 #define bitset_fill(name, bit)                                                                    \
     static_assert(bit >= 0, "ERROR: bitset_fill: Invalid bit value\n");                           \
@@ -56,10 +56,10 @@ typedef unsigned long bitset_index_t;                                           
     }
 
 #define bitset_setbit(name, index, bit)                                                           \
-    bitset_t max_arr_length = (bitset_size(name) / BIT_AMOUNT) + 1;                               \
-    static_assert(index > 0, "ERROR: bitset_setbit: Invalid index\n");                            \
-    static_assert(index <= (max_arr_length), "ERROR: bitset_setbit: Invalid index\n");            \
     static_assert(bit >= 0, "ERROR: bitset_setbit: Invalid bit value\n");                         \
+    if(index <= 0 || index > (bitset_size(name) / BIT_AMOUNT) + 1) {                              \
+        error_exit("ERROR: bitste_setbit: Invalid index");                                        \
+    }                                                                                             \
     if(bit) {                                                                                     \
         /* First gets the index, where the bit is located (given by index),                       \
            then performs a bitwise shift to the left and a bitwise                                \
@@ -105,7 +105,7 @@ inline bitset_index_t bitset_size(bitset_t name) {
 }
 
 inline void bitset_fill(bitset_t name, bitset_index_t bit) {
-    if(bit > 0 && bit <= ) {
+    if(bit > 0 && bit <= bitset_size(name)) {
         error_exit("ERROR: bitset_fill: Invalid bit value\n");
     }
     bitset_index_t index_amount = ((name[0] - 1) / BIT_AMOUNT) + 1;
