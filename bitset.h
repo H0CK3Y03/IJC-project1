@@ -77,15 +77,13 @@ typedef unsigned long bitset_index_t;                                           
     }
 
 #define bitset_getbit(name, index)                                                                \
-    if(index < 0 || index > bitset_size(name)) {                                                  \
-        error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", index, bitset_size(name));      \
-    }                                                                                             \
     /* Position_value is the value of the index where the specified bit is located.               \
        bit_value will be set to 0 or 1.                                                           \
        Bit shifts position_value to the right by the amount that is specified in index.           \
        Then compares the LSB with 1 (performs a bitwise "and" operation), gets 0 or 1. */         \
-    bitset_index_t position_value = name[((index - 1) / BIT_AMOUNT) + 1];                         \
-    (position_value >> (index % BIT_AMOUNT)) & 1;                                                 \
+    ((index <= 0 || index > bitset_size(name))                                                    \
+    ? (error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", index, bitset_size(name)), 0)    \
+    : ((name[((index - 1) / BIT_AMOUNT) + 1] >> (index % BIT_AMOUNT)) & 1))
 
 #endif /* MACROS */
 
