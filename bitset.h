@@ -26,7 +26,7 @@ typedef unsigned long bitset_index_t;                                           
     /* Calculates how many unsigned long indices we need to satisfy                               \
        the amount of bits in size + another index to store the size in.                           \
        Then assigns the first index [0] with the size of the array in bits. */                    \
-    bitset_t name[((size - 1) / BIT_AMOUNT) + 1] = {size};                                        \
+    bitset_index_t name[((size - 1) / BIT_AMOUNT) + 1] = {size};                                  \
 
 #define bitset_alloc(name, size)                                                                  \
     static_assert(size > 0, "ERROR: bitset_alloc: Invalid size\n");                               \
@@ -82,8 +82,8 @@ typedef unsigned long bitset_index_t;                                           
        Bit shifts position_value to the right by the amount that is specified in index.           \
        Then compares the LSB with 1 (performs a bitwise "and" operation), gets 0 or 1. */         \
     ((index <= 0 || index > bitset_size(name))                                                    \
-    ? (error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", index, bitset_size(name)), 0)    \
-    : ((name[((index - 1) / BIT_AMOUNT) + 1] >> (index % BIT_AMOUNT)) & 1))
+    ? (error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", index, bitset_size(name)), 0UL)  \
+    : ((name[((index - 1) / BIT_AMOUNT) + 1] >> (index % BIT_AMOUNT)) & 1UL))
 
 #endif /* MACROS */
 
