@@ -144,8 +144,12 @@ int main(int argc, char **argv) {
                 break;
             
             default:
-                error_exit("Error: Something wrong with finite-state machine.");
+                error_exit("Error: Something wrong with finite-state machine.\n");
         }
+    }
+
+    if(state != initial) {
+        error_exit("Error: Unfinished comment or string.\n");
     }
 
     if(file != stdin && file != NULL) {
