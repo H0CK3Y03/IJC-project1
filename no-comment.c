@@ -37,9 +37,11 @@ int main(int argc, char **argv) {
                     state = forward_slash1;
                 }
                 else if(c == '"') {
+                    putchar(c);
                     state = double_quote;
                 }
                 else if(c == '\'') {
+                    putchar(c);
                     state = single_quote;
                 }
                 else {
@@ -57,16 +59,20 @@ int main(int argc, char **argv) {
                 else {
                     putchar('/');
                     putchar('c');
+                    state = initial;
                 }
                 break;
 
             case forward_slash2:
-                if(c == '\n') {
+                if(c == '\\') {
+                    state = backslash_slash;
+                }
+                else if(c == '\n') {
                     putchar(c);
                     state = initial;
                 }
                 else {
-                    putchar(c);
+                    ;
                 }
                 break;
 
@@ -75,21 +81,19 @@ int main(int argc, char **argv) {
                     state = star2;
                 }
                 else {
-                    putchar(c);
+                    ;
                 }
                 break;
             
             case star2:
                 if(c == '*') {
-                    putchar(c);
+                    ;
                 }
                 else if(c == '/') {
                     putchar(' ');
                     state = initial;
                 }
                 else {
-                    putchar('*');
-                    putchar(c);
                     state = star1;
                 }
                 break;
@@ -98,7 +102,7 @@ int main(int argc, char **argv) {
                 if(c == '\\') {
                     state = backslash_double;
                 }
-                else if(c == '"') {
+                if(c == '"') {
                     putchar(c);
                     state = initial;
                 }
@@ -108,21 +112,15 @@ int main(int argc, char **argv) {
                 break;
 
             case backslash_double:
-                if(c == '\\' || c == '"') {
-                    putchar(c);
-                    state = double_quote;
-                }
-                else {
-                    putchar(c);
-                    // debatable here
-                }
+                putchar(c);
+                state = double_quote;
                 break;
 
             case single_quote:
                 if(c == '\\') {
                     state = backslash_single;
                 }
-                else if(c == '\'') {
+                if(c == '\'') {
                     putchar(c);
                     state = initial;
                 }
@@ -132,13 +130,16 @@ int main(int argc, char **argv) {
                 break;
             
             case backslash_single:
-                if(c == '\'' || c == '\\') {
-                    putchar(c);
-                    state = single_quote;
+                putchar(c);
+                state = single_quote;
+                break;
+
+            case backslash_slash:
+                if(c == '\\') {
+                    ;
                 }
                 else {
-                    putchar(c);
-                    // debatable here, maybe \c should work
+                    state = forward_slash2;
                 }
                 break;
             

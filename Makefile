@@ -29,7 +29,7 @@ error.o: error.c error.h
 	gcc $(CFLAGS) -c -o $@ error.c
 
 # ------------------------------------------primes using inline functions------------------------------------------
-primes-i: primes.o eratosthenes.o error.o bitset.c
+primes-i: primes-i.o eratosthenes.o error.o bitset.c
 	gcc $(CFLAGS) -DUSE_INLINE -o $@ $^  -lm
 # -DUSE_INLINE -> defines USE_INLINE for header files to know to use inline functions and not macros
 
