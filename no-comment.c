@@ -10,7 +10,7 @@ enum state {initial, forward_slash1, forward_slash2,
             star1, star2, double_quote, backslash_double,
             single_quote, backslash_single, backslash_slash};
 
-int main(int argc, int **argv) {
+int main(int argc, char **argv) {
     // file / stdin handling
     FILE *file = NULL;
 
@@ -29,7 +29,7 @@ int main(int argc, int **argv) {
     // Finite-state machine
     int c;
     int state = initial;
-    while (c = getc(file) != EOF) {
+    while ((c = getc(file)) != EOF) {
         switch(state) {
 
             case initial:
@@ -99,6 +99,7 @@ int main(int argc, int **argv) {
                     state = backslash_double;
                 }
                 else if(c == '"') {
+                    putchar(c);
                     state = initial;
                 }
                 else {
@@ -122,6 +123,7 @@ int main(int argc, int **argv) {
                     state = backslash_single;
                 }
                 else if(c == '\'') {
+                    putchar(c);
                     state = initial;
                 }
                 else {
@@ -141,7 +143,7 @@ int main(int argc, int **argv) {
                 break;
             
             default:
-                exit_error("Error: Something wrong with finite-state machine.");
+                error_exit("Error: Something wrong with finite-state machine.");
         }
     }
 

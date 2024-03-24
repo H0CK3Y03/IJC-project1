@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h> // for exit() function
 #include "error.h"
 
 // ... -> ellipsis, variable number of arguments, accessible by the library stdarg.h
