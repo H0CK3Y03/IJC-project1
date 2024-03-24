@@ -8,7 +8,7 @@
 // the current character / case
 enum state {initial, forward_slash1, forward_slash2,
             star1, star2, double_quote, backslash_double,
-            single_quote, backslash_single};
+            single_quote, backslash_single, backslash_slash};
 
 int main(int argc, int **argv) {
     // file / stdin handling
@@ -143,6 +143,10 @@ int main(int argc, int **argv) {
             default:
                 exit_error("Error: Something wrong with finite-state machine.");
         }
+    }
+
+    if(file != stdin && file != NULL) {
+        fclose(file);
     }
 
     return 0;
