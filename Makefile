@@ -1,6 +1,6 @@
 # CC = gcc
 # most CLI flags
-CFLAGS = -g -std=c11 -pedantic -Wall -Wextra -fsanitize=address -O2
+CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
 
 # Makes sure to run all, clean, run, even if there are files named all, clean, run
 .PHONY: all clean run
@@ -53,8 +53,8 @@ clean_o:
 
 # runs all of the binaries
 run: all
-	ulimit -s 102400 && ./primes
-	ulimit -s 102400 && ./primes-i
+	ulimit -s 100000 && ./primes
+	ulimit -s 100000 && ./primes-i
 
 # zips all .c and .h files into a single .zip archive
 zip: *.c *.h
