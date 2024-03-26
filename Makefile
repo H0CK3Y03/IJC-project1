@@ -1,6 +1,7 @@
 # CC = gcc
 # most CLI flags
 CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
+LDFLAGS = -lm #-fsanitize=address
 
 # Makes sure to run all, clean, run, even if there are files named all, clean, run
 .PHONY: all clean run
@@ -12,7 +13,7 @@ default_target: all
 
 # -------------------------------primes using macros-------------------------------
 primes: primes.o eratosthenes.o error.o
-	gcc $(CFLAGS) -o $@ $^ -lm
+	gcc $(CFLAGS) -o $@ $^ $(LDFLAGS)
 # $@ -> variable that represents the target (primes)
 # $^ -> variable representing all dependendencies (files: primes.o era...)
 # $(CFLAGS) -> custom variable that contains all flags
@@ -30,7 +31,7 @@ error.o: error.c error.h
 
 # ------------------------------------------primes using inline functions------------------------------------------
 primes-i: primes-i.o eratosthenes.o error.o bitset.c
-	gcc $(CFLAGS) -DUSE_INLINE -o $@ $^  -lm
+	gcc $(CFLAGS) -DUSE_INLINE -o $@ $^  $(LDFLAGS)
 # -DUSE_INLINE -> defines USE_INLINE for header files to know to use inline functions and not macros
 
 primes-i.o: primes.c eratosthenes.h error.h

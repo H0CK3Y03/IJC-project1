@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     int state = initial;
     while ((c = getc(file)) != EOF) {
         switch(state) {
-
+// starting state
             case initial:
                 if(c == '/') {
                     state = forward_slash1;
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
                     putchar(c);
                 }
                 break;
-
+// when c is the first forward slash
             case forward_slash1:
                 if(c == '/') {
                     state = forward_slash2;
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
                     state = initial;
                 }
                 break;
-
+// when c is the second forward slash
             case forward_slash2:
                 if(c == '\\') {
                     state = backslash_slash;
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
                     ;
                 }
                 break;
-
+// when c is a star after a forward slash
             case star1:
                 if(c == '*') {
                     state = star2;
@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
                     ;
                 }
                 break;
-            
+// when c is the second star in the multiline comment            
             case star2:
                 if(c == '*') {
                     ;
@@ -97,12 +97,12 @@ int main(int argc, char **argv) {
                     state = star1;
                 }
                 break;
-
+// when c is a double quote
             case double_quote:
                 if(c == '\\') {
                     state = backslash_double;
                 }
-                if(c == '"') {
+                else if(c == '"') {
                     putchar(c);
                     state = initial;
                 }
@@ -110,17 +110,17 @@ int main(int argc, char **argv) {
                     putchar(c);
                 }
                 break;
-
+// when c is a backslash in a string
             case backslash_double:
                 putchar(c);
                 state = double_quote;
                 break;
-
+// when c is a single quote
             case single_quote:
                 if(c == '\\') {
                     state = backslash_single;
                 }
-                if(c == '\'') {
+                else if(c == '\'') {
                     putchar(c);
                     state = initial;
                 }
@@ -128,12 +128,12 @@ int main(int argc, char **argv) {
                     putchar(c);
                 }
                 break;
-            
+// when c is a backslash in a character (single quotes)
             case backslash_single:
                 putchar(c);
                 state = single_quote;
                 break;
-
+// when c is a backlash in a single line comment 
             case backslash_slash:
                 if(c == '\\') {
                     ;
@@ -142,16 +142,16 @@ int main(int argc, char **argv) {
                     state = forward_slash2;
                 }
                 break;
-            
+// if c is not a valid character
             default:
                 error_exit("Error: Something wrong with finite-state machine.\n");
         }
     }
-
+// checks if the file has any errors (unfinished comments, strings...)
     if(state != initial) {
         error_exit("Error: Unfinished comment or string.\n");
     }
-
+// closes the file if data is read from a file
     if(file != stdin && file != NULL) {
         fclose(file);
     }

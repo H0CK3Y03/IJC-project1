@@ -24,16 +24,18 @@ typedef unsigned long bitset_index_t;                                           
 #define bitset_create(name, size)                                                                 \
     static_assert(size > 0, "ERROR: bitset_create: Invalid size.\n");                             \
     /* Calculates how many unsigned long indices we need to satisfy                               \
-       the amount of bits in size + another index to store the size in.                           \
+       the amount of bits in size +  2 more indices to store the size in.                         \
        Then assigns the first index [0] with the size of the array in bits. */                    \
-    bitset_index_t name[(size / BIT_AMOUNT) + 1] = {size, };                                      \
+    bitset_index_t name[(size / BIT_AMOUNT) + 2] = {size, };                                      \
 
 #define bitset_alloc(name, size)                                                                  \
     static_assert(size > 0, "ERROR: bitset_alloc: Invalid size.\n");                              \
-    bitset_t name = malloc((size / BIT_AMOUNT) + 1);                                        \
-    static_assert(name != NULL, "ERROR: bitset_alloc: Unable to allocate memory for array.\n");   \
-    bitset_fill(name, 0);                                                                         \
+    bitset_t name = malloc(((size / BIT_AMOUNT) + 1) * BIT_AMOUNT);                               \
+    if(name == NULL) {                                                                            \
+        error_exit("ERROR: bitset_alloc: Unable to allocate memory for array.\n");                \
+    }                                                                                             \
     name[0] = size;                                                                               \
+    bitset_fill(name, 0);                                                                         \
 
 /* ---------------------- MACROS ---------------------- */
 
@@ -42,7 +44,6 @@ typedef unsigned long bitset_index_t;                                           
 #define bitset_free(name)                                                                         \
     if(name != NULL) {                                                                            \
         free(name);                                                                               \
-        name = NULL;                                                                              \
     }                                                                                             \
 
 #define bitset_size(name)                                                                         \
@@ -51,7 +52,7 @@ typedef unsigned long bitset_index_t;                                           
 #define bitset_fill(name, bit)                                                                    \
     static_assert(bit >= 0, "ERROR: bitset_fill: Invalid bit value\n");                           \
     bitset_index_t index_amount = (name[0] / BIT_AMOUNT) + 1;                                     \
-    for(bitset_index_t index = 1; index < index_amount; index++) {                               \
+    for(bitset_index_t index = 1; index <= index_amount; index++) {                               \
         /* Sets all bits to 1 (~(0LU)) or to 0 for all indices. */                                \
         name[index] = bit ? ~(0LU) : 0;                                                           \
     }
@@ -82,9 +83,9 @@ typedef unsigned long bitset_index_t;                                           
        bit_value will be set to 0 or 1.                                                           \
        Bit shifts position_value to the right by the amount that is specified in index.           \
        Then compares the LSB with 1 (performs a bitwise "and" operation), gets 0 or 1. */         \
-    ((index <= 0 || index > bitset_size(name))                                                    \
-    ? (error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n", index, bitset_size(name)), 0UL) \
-    : ((name[(index / BIT_AMOUNT) + 1] >> (index % BIT_AMOUNT)) & 1LU))
+    ((index > bitset_size(name))                                                    \
+    ? (error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n", index, bitset_size(name)), 0UL)\
+    : ((name[(index / BIT_AMOUNT) + 1] >> (index % BIT_AMOUNT)) & 1LU))\
 
 #endif /* MACROS */
 
@@ -95,7 +96,6 @@ typedef unsigned long bitset_index_t;                                           
 inline void bitset_free(bitset_t name) {
     if(name != NULL) {
         free(name);
-        name = NULL;
     }
 }
 
@@ -104,12 +104,9 @@ inline bitset_index_t bitset_size(bitset_t name) {
 }
 
 inline void bitset_fill(bitset_t name, bitset_index_t bit) {
-    if(bit > 0 && bit <= bitset_size(name)) {
-        error_exit("ERROR: bitset_fill: Invalid bit value\n");
-    }
     bitset_index_t index_amount = (name[0] / BIT_AMOUNT) + 1;
     for(bitset_index_t index = 1; index <= index_amount; index++) {
-        name[index] = bit ? ~(0) : 0;
+        name[index] = bit ? ~(0LU) : 0;
     }
 }
 
@@ -129,8 +126,7 @@ inline bitset_index_t bitset_getbit(bitset_t name, bitset_index_t index) {
     if(index > bitset_size(name)) {
         error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n", index, bitset_size(name));
     }
-    bitset_index_t position_value = name[(index / BIT_AMOUNT) + 1];
-    return (position_value >> (index % BIT_AMOUNT)) & 1;
+    return (((name[(index / BIT_AMOUNT) + 1]) >> (index % BIT_AMOUNT))) & (1LU);
 }
 
 #endif /* USE_INLINE */
