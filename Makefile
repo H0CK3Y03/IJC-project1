@@ -1,6 +1,6 @@
 # CC = gcc
 # most CLI flags
-CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
+CFLAGS = -g -std=c11 -pedantic -Wall -Wextra #-O2
 LDFLAGS = -lm #-fsanitize=address
 
 # Makes sure to run all, clean, run, even if there are files named all, clean, run

@@ -26,7 +26,7 @@ typedef unsigned long bitset_index_t;                                           
     /* Calculates how many unsigned long indices we need to satisfy                               \
        the amount of bits in size +  2 more indices to store the size in.                         \
        Then assigns the first index [0] with the size of the array in bits. */                    \
-    bitset_index_t name[(size / BIT_AMOUNT) + 2] = {size, };                                      \
+    bitset_index_t name[(size / BIT_AMOUNT) + (size % BIT_AMOUNT > 0 ? 0 : 1) + 1] = {size};      \
 
 #define bitset_alloc(name, size)                                                                  \
     static_assert(size > 0, "ERROR: bitset_alloc: Invalid size.\n");                              \
@@ -51,7 +51,7 @@ typedef unsigned long bitset_index_t;                                           
 
 #define bitset_fill(name, bit)                                                                    \
     static_assert(bit >= 0, "ERROR: bitset_fill: Invalid bit value\n");                           \
-    bitset_index_t index_amount = (name[0] / BIT_AMOUNT) + 1;                                     \
+    bitset_index_t index_amount = (name[0] / BIT_AMOUNT) + (name[0] % BIT_AMOUNT > 0 ? 0 : 1) + 1;\
     for(bitset_index_t index = 1; index <= index_amount; index++) {                               \
         /* Sets all bits to 1 (~(0LU)) or to 0 for all indices. */                                \
         name[index] = bit ? ~(0LU) : 0;                                                           \
@@ -104,7 +104,7 @@ inline bitset_index_t bitset_size(bitset_t name) {
 }
 
 inline void bitset_fill(bitset_t name, bitset_index_t bit) {
-    bitset_index_t index_amount = (name[0] / BIT_AMOUNT) + 1;
+    bitset_index_t index_amount = (name[0] / BIT_AMOUNT) + (name[0] % BIT_AMOUNT > 0 ? 0 : 1) + 1;
     for(bitset_index_t index = 1; index <= index_amount; index++) {
         name[index] = bit ? ~(0LU) : 0;
     }
