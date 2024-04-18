@@ -1,4 +1,4 @@
-# CC = gcc
+CC = gcc
 # most CLI flags
 CFLAGS = -g -std=c11 -pedantic -Wall -Wextra #-O2
 LDFLAGS = -lm #-fsanitize=address
@@ -21,7 +21,7 @@ primes: primes.o eratosthenes.o error.o
 
 # assures that changed files will initiate a recompilation of all necessary files
 primes.o: primes.c eratosthenes.h error.h
-	gcc $(CFLAGS) -c -o $@ primes.c
+	$(CC) $(CFLAGS) -c -o $@ primes.c
 
 eratosthenes.o: eratosthenes.c eratosthenes.h bitset.h error.h
 	gcc $(CFLAGS) -c -o $@ eratosthenes.c

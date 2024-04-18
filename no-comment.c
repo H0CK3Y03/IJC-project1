@@ -100,6 +100,7 @@ int main(int argc, char **argv) {
 // when c is a double quote
             case double_quote:
                 if(c == '\\') {
+                    putchar(c);
                     state = backslash_double;
                 }
                 else if(c == '"') {
@@ -118,6 +119,7 @@ int main(int argc, char **argv) {
 // when c is a single quote
             case single_quote:
                 if(c == '\\') {
+                    putchar(c);
                     state = backslash_single;
                 }
                 else if(c == '\'') {
