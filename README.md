@@ -1,1 +1,1 @@
-## 1. project for IJC - C language seminar
+# 1. project for IJC - C language seminar
