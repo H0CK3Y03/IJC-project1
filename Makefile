@@ -22,6 +22,7 @@ primes: primes.o eratosthenes.o error.o
 # assures that changed files will initiate a recompilation of all necessary files
 primes.o: primes.c eratosthenes.h error.h
 	$(CC) $(CFLAGS) -c -o $@ primes.c
+# -c -> for object files -> source files into object files without linking
 
 eratosthenes.o: eratosthenes.c eratosthenes.h bitset.h error.h
 	gcc $(CFLAGS) -c -o $@ eratosthenes.c
